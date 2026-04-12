@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống XSMB Pro - Tự Động 2026</title>
+    <style>
+        :root {
+            --bg-dark: #121212; --card-bg: #1e1e1e;
+            --primary: #ff4d4d; --secondary: #2ecc71;
+            --text: #e0e0e0; --blue: #3498db;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; padding-bottom: 60px; }
+        .container { max-width: 500px; margin: auto; }
+        
+        .tabs { display: flex; background: #000; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+        .tab-item { flex: 1; padding: 15px 5px; text-align: center; cursor: pointer; font-size: 13px; font-weight: bold; color: #888; }
+        .tab-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+
+        /* LIVE BOX TỐI ƯU */
+        .live-box {
+            width: 100%;
+            height: 320px; 
+            overflow: hidden;
+            position: relative;
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+        .live-box iframe {
+            position: absolute;
+            top: -80px; 
+            left: 0;
+            width: 100%;
+            height: 2000px;
+            border: none;
+        }
+
+        .grid-num { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 10px; }
+        .btn-num { background: #333; border: 1px solid #444; color: white; padding: 10px 0; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .btn-num.active { background: var(--secondary); border-color: #fff; }
+        
+        #display-dan { background: #000; padding: 15px; margin: 10px; border-radius: 8px; color: #00ff00; word-break: break-all; min-height: 50px; border: 1px dashed #555; font-family: monospace; font-size: 14px; }
+        .panel { display: none; padding: 10px; }
+        .panel.active { display: block; }
+
+        h4 { margin: 15px 0 5px 10px; color: var(--blue); font-size: 14px; text-transform: uppercase; }
+        .btn-copy-main { width: calc(100% - 20px); padding: 15px; background: var(--blue); border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; margin: 10px; }
+
+        /* XIÊN GHÉP STYLING */
+        textarea, select { width: 100%; background: #222; color: #fff; border: 1px solid #444; padding: 10px; border-radius: 5px; margin-top: 5px; box-sizing: border-box; }
+        .result-box { background: #000; padding: 10px; color: #2ecc71; margin-top: 10px; border-radius: 5px; border: 1px solid #333; min-height: 40px; }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab-item active" onclick="openTab(event, 'main-tool')">KẾT QUẢ & GHÉP SỐ</div>
+            <div class="tab-item" onclick="openTab(event, 'xien')">XIÊN GHÉP</div>
+        </div>
+
+        <div id="main-tool" class="panel active">
+            <div style="text-align: center; margin-bottom: 5px;">
+                <span style="color: #2ecc71; font-size: 11px;">● TRỰC TIẾP DỮ LIỆU XSMB 2026</span>
+            </div>
+            
+            <div class="live-box">
+                <iframe src="https://az24.vn/xsmb-30-ngay.html" scrolling="auto"></iframe>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
+
+            <h4 style="color: var(--primary);">1. CHỌN ĐẦU (Hàng chục)</h4>
+            <div class="grid-num" id="chuc-grid"></div>
+            <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
+                <button class="btn-num" onclick="selectQuick('chuc', 'tai')">Tài</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'xiu')">Xỉu</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'tatca')">Tất cả</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'le')">Lẻ</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'chan')">Chẵn</button>
+                <button class="btn-num" style="background:#600;" onclick="clearSet('chuc')">Xóa</button>
+            </div>
+
+            <h4>2. CHỌN ĐUÔI (Hàng đơn vị)</h4>
+            <div class="grid-num" id="dv-grid"></div>
+            <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
+                <button class="btn-num" onclick="selectQuick('dv', 'tai')">Tài</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'xiu')">Xỉu</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'tatca')">Tất cả</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'le')">Lẻ</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'chan')">Chẵn</button>
+                <button class="btn-num" style="background:#600;" onclick="clearSet('dv')">Xóa</button>
+            </div>
+
+            <div id="display-dan">Dàn số: (Chọn số để tạo dàn)</div>
+            <button onclick="copyDan()" class="btn-copy-main">SAO CHÉP DÀN SỐ</button>
+        </div>
+
+        <div id="xien" class="panel">
+            <h2>Ghép Xiên Tự Động</h2>
+            <label>Nhập dãy số (cách nhau bởi dấu cách):</label>
+            <textarea id="inputNumbers" rows="3" placeholder="Ví dụ: 01 02 03 04 05"></textarea>
+
+            <label style="display:block; margin-top:10px;">Loại xiên:</label>
+            <select id="xienType">
+                <option value="2">Xiên 2</option>
+                <option value="3">Xiên 3</option>
+                <option value="4">Xiên 4</option>
+            </select>
+
+            <button onclick="processXien()" class="btn-copy-main" style="margin: 20px 0 10px 0; background: var(--secondary);">GHÉP XIÊN</button>
+            
+            <div id="resultContainer" style="display:none;">
+                <div id="output" class="result-box"></div>
+                <div id="count" style="font-size:12px; margin-top:5px; color:#888;"></div>
+                <button id="copyXienBtn" onclick="copyXien()" class="btn-copy-main" style="background: #555;">Sao Chép Xiên</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    let chucSet = new Set(), dvSet = new Set();
+    let currentXienResult = "";
+
+    function initButtons() {
+        const cGrid = document.getElementById('chuc-grid');
+        const dGrid = document.getElementById('dv-grid');
+        for(let i=0; i<10; i++) {
+            cGrid.innerHTML += `<button class="btn-num" id="c-${i}" onclick="toggleNum('chuc', ${i})">${i}</button>`;
+            dGrid.innerHTML += `<button class="btn-num" id="d-${i}" onclick="toggleNum('dv', ${i})">${i}</button>`;
+        }
+    }
+
+    function openTab(evt, tabName) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    function toggleNum(type, n) {
+        let set = (type === 'chuc') ? chucSet : dvSet;
+        let id = (type === 'chuc') ? `c-${n}` : `d-${n}`;
+        const btn = document.getElementById(id);
+        
+        if(set.has(n)) { set.delete(n); btn.classList.remove('active'); } 
+        else { set.add(n); btn.classList.add('active'); }
+        renderDan();
+    }
+
+    function selectQuick(type, mode) {
+        clearSet(type);
+        for(let i=0; i<10; i++) {
+            if(mode==='tai' && i>=5) toggleNum(type, i);
+            else if(mode==='xiu' && i<5) toggleNum(type, i);
+            else if(mode==='le' && i%2!==0) toggleNum(type, i);
+            else if(mode==='chan' && i%2===0) toggleNum(type, i);
+            else if(mode==='tatca') toggleNum(type, i);
+        }
+    }
+
+    function clearSet(type) {
+        if(type==='chuc') { 
+            chucSet.clear(); 
+            document.querySelectorAll('#chuc-grid .btn-num').forEach(b=>b.classList.remove('active')); 
+        } else { 
+            dvSet.clear(); 
+            document.querySelectorAll('#dv-grid .btn-num').forEach(b=>b.classList.remove('active')); 
+        }
+        renderDan();
+    }
+
+    function renderDan() {
+        let res = [];
+        let chucArr = Array.from(chucSet).sort();
+        let dvArr = Array.from(dvSet).sort();
+        chucArr.forEach(c => dvArr.forEach(d => res.push(c + "" + d)));
+        document.getElementById('display-dan').innerText = res.length > 0 ? "Dàn (" + res.length + " số): " + res.join(", ") : "Dàn số: (Chọn số để tạo dàn)";
+    }
+
+    function copyDan() {
+        const text = document.getElementById('display-dan').innerText;
+        if(text.includes(": ")) {
+            navigator.clipboard.writeText(text.split(": ")[1]).then(() => alert("Đã sao chép dàn!"));
+        }
+    }
+
+    function processXien() {
+        const input = document.getElementById('inputNumbers').value;
+        const size = parseInt(document.getElementById('xienType').value);
+        let numbers = [...new Set(input.split(/[\s, \n]+/).filter(n => n.length > 0))];
+
+        if (numbers.length < size) { alert(`Cần ít nhất ${size} số!`); return; }
+
+        let results = [];
+        function combine(start, path) {
+            if (path.length === size) { results.push(path.join("-")); return; }
+            for (let i = start; i < numbers.length; i++) combine(i + 1, [...path, numbers[i]]);
+        }
+        combine(0, []);
+        
+        currentXienResult = results.join("\n");
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('output').innerText = results.join(", ");
+        document.getElementById('count').innerText = `Tổng cộng: ${results.length} cặp.`;
+    }
+
+    function copyXien() {
+        if(currentXienResult) {
+            navigator.clipboard.writeText(currentXienResult).then(() => alert("Đã sao chép danh sách xiên!"));
+        }
+    }
+    
+    window.onload = initButtons;
+</script>
+</body>
+</html>
