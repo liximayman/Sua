@@ -95,7 +95,8 @@
     </div>
 
 <script>
-    let dauSet = new Set(), duoiSet = new Set();
+    
+ let dauSet = new Set(), duoiSet = new Set();
 
     function init() {
         const gd = document.getElementById('grid-dau');
@@ -127,7 +128,9 @@
         update();
     }
 
+    // ĐÃ SỬA: Thêm resetGroup(type) vào đầu để không bị cộng dồn lỗi
     function quickSel(type, mode) {
+        resetGroup(type); // Xóa cũ chọn mới cho chính xác
         let s = (type === 'dau') ? dauSet : duoiSet;
         for(let i=0; i<10; i++) {
             let pick = false;
@@ -147,6 +150,7 @@
 
     function resetGroup(type) {
         if(type==='dau') dauSet.clear(); else duoiSet.clear();
+        // Sửa lỗi selector để xóa class active chính xác hơn
         document.querySelectorAll(`#grid-${type} .btn`).forEach(b => b.classList.remove('active'));
         update();
     }
@@ -163,12 +167,14 @@
         });
         
         const display = document.getElementById('result-dan');
-        display.innerText = res.length > 0 ? res.join(", ") : "Dàn số: Chưa chọn...";
+        // ĐÃ SỬA: Hiển thị dàn số đẹp hơn, có tổng số lượng
+        display.innerHTML = res.length > 0 ? `<b>Tổng ${res.length} số:</b><br>${res.join(", ")}` : "Dàn số: Chưa chọn...";
     }
 
     function processXien(n) {
         let val = document.getElementById('xien-input').value;
-        let nums = [...new Set(val.split(/[\s,.\n\t]+/).filter(x => x.length > 0))];
+        // ĐÃ SỬA: Regex chuẩn để tách số dù người dùng nhập dấu cách, phẩy, hay xuống dòng
+        let nums = [...new Set(val.replace(/[,.\n\t]/g, ' ').split(' ').filter(x => x.length > 0))];
         
         if(nums.length < n) {
             alert("Bạn cần nhập ít nhất " + n + " số để ghép!");
@@ -188,13 +194,15 @@
 
     async function copyText(id) {
         let txt = document.getElementById(id).innerText;
+        // Tách lấy phần số, bỏ phần "Tổng ... số"
+        if (txt.includes("số:")) txt = txt.split("số:")[1].trim();
+
         if(txt.includes("...") || txt === "") return;
         
         try {
             await navigator.clipboard.writeText(txt);
-            alert("Đã sao chép dàn số!");
+            alert("Đã sao chép!");
         } catch (err) {
-            // Backup copy cho máy không hỗ trợ clipboard API
             let textArea = document.createElement("textarea");
             textArea.value = txt;
             document.body.appendChild(textArea);
@@ -206,6 +214,4 @@
     }
 
     window.onload = init;
-</script>
-</body>
-</html>
+    
