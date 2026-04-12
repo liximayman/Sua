@@ -12,7 +12,7 @@
             --text: #e0e0e0; --blue: #3498db;
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; padding-bottom: 60px; }
-        .container { max-width: 500px; margin: auto; }
+        .container { max-width: 600px; margin: auto; }
         
         .tabs { display: flex; background: #000; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
         .tab-item { flex: 1; padding: 15px 5px; text-align: center; cursor: pointer; font-size: 13px; font-weight: bold; color: #888; }
@@ -64,26 +64,26 @@
         </div>
 
         <div id="ghep" class="panel">
-            <h4 style="margin: 10px 0;">ĐẦU (Hàng chục)</h4>
+            <h4 style="margin: 5px 0;">ĐẦU (Hàng chục)</h4>
             <div class="grid-num" id="chuc-grid"></div>
             <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
+                <button class="btn-num" style="background:#FF4500;" onclick="selectQuick('chuc', 'tatca')">Tất cả</button>
                 <button class="btn-num" onclick="selectQuick('chuc', 'tai')">Tài</button>
                 <button class="btn-num" onclick="selectQuick('chuc', 'xiu')">Xỉu</button>
-                <button class="btn-num" onclick="selectQuick('chuc', 'tatca')">Tất cả</button>
                 <button class="btn-num" onclick="selectQuick('chuc', 'le')">Lẻ</button>
                 <button class="btn-num" onclick="selectQuick('chuc', 'chan')">Chẵn</button>
-                <button class="btn-num" style="background:#600;" onclick="clearSet('chuc')">Xóa</button>
+                <button class="btn-num" style="background:#600;" onclick="clearSet('chuc', 'xoa')">Xóa</button>
             </div>
 
-            <h4 style="margin: 10px 0;">ĐUÔI (Hàng đơn vị)</h4>
+            <h4 style="margin: 5px 0;">ĐUÔI (Hàng đơn vị)</h4>
             <div class="grid-num" id="dv-grid"></div>
             <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
+                <button class="btn-num" style="background:#FF4500;" onclick="selectQuick('dv', 'tatca')">Tất cả</button>
                 <button class="btn-num" onclick="selectQuick('dv', 'tai')">Tài</button>
                 <button class="btn-num" onclick="selectQuick('dv', 'xiu')">Xỉu</button>
-                <button class="btn-num" onclick="selectQuick('dv', 'tatca')">Tất cả</button>
                 <button class="btn-num" onclick="selectQuick('dv', 'le')">Lẻ</button>
                 <button class="btn-num" onclick="selectQuick('dv', 'chan')">Chẵn</button>
-                <button class="btn-num" style="background:#600;" onclick="clearSet('dv')">Xóa</button>
+                <button class="btn-num" style="background:#600;" onclick="clearSet('dv', 'xoa')">Xóa</button>
             </div>
 
             <div id="display-dan">Dàn số: </div>
