@@ -2,241 +2,106 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống XSMB Pro 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống XSMB Pro - Tự Động 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #0f0f0f; 
-            --card-bg: #1e1e1e;
-            --primary: #ff4d4d; 
-            --secondary: #2ecc71;
-            --text: #e0e0e0; 
-            --blue: #3498db;
-            --gray: #333;
+            --bg-dark: #121212; --card-bg: #1e1e1e;
+            --primary: #ff4d4d; --secondary: #2ecc71;
+            --text: #e0e0e0; --blue: #3498db;
         }
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg-dark); 
-            color: var(--text); 
-            margin: 0; 
-            padding-bottom: 15px;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; padding-bottom: 60px; }
         .container { max-width: 500px; margin: auto; }
         
-        .tabs { 
-            display: flex; 
-            background: #000; 
-            border-bottom: 1px solid #333; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-        }
-        .tab-item { 
-            flex: 1; 
-            padding: 12px 2px; 
-            text-align: center; 
-            cursor: pointer; 
-            font-size: 15px; 
-            font-weight: bold; 
-            color: #888; 
-            text-transform: uppercase;
-        }
-        .tab-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: #1a1a1a; }
+        .tabs { display: flex; background: #000; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+        .tab-item { flex: 1; padding: 15px 5px; text-align: center; cursor: pointer; font-size: 13px; font-weight: bold; color: #888; }
+        .tab-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
-        /* KHU VỰC LIVE BOX - CỐ ĐỊNH 25% CHIỀU CAO MÀN HÌNH */
-        .live-container {
-            padding: 5px;
-            background: #000;
-        }
         .live-box {
             width: 100%;
-            height: 50vh; /* Chỉ chiếm 25% chiều cao màn hình */
-            overflow-y: auto; 
-            overflow-x: hidden;
+            height: 600px; /* Giới hạn chiều cao vừa đủ */
+            overflow: hidden;
             position: relative;
             background: #fff;
-            border-radius: 6px;
-            border: 1px solid var(--gray);
-            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            margin-top: 10px;
         }
         .live-box iframe {
+            position: absolute;
+            top: -80px; /* Căn chỉnh lại để khớp bảng KQ */
+            left: 0;
             width: 100%;
-            height: 1500px; /* Chiều cao nội dung gốc để cuộn bên trong */
+            height: 2000px;
             border: none;
-            display: block;
         }
 
-        /* DÀN SỐ HIỂN THỊ */
-        #display-dan { 
-            background: #050505; 
-            padding: 12px; 
-            margin: 10px; 
-            border-radius: 6px; 
-            color: #00ff00; 
-            word-break: break-all; 
-            min-height: 40px; 
-            border: 1px dashed #444; 
-            font-family: 'Courier New', monospace; 
-            font-size: 13px; 
-            line-height: 1.4;
-        }
-
-        /* TỐI ƯU LẠI GRID NÚT BẤM */
-        .grid-num { 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 0,5px; 
-            padding: 8px; 
-        }
-        .btn-num { 
-            background: #262626; 
-            border: 0,5px solid #444; 
-            color: white; 
-            padding: 8px 0; 
-            border-radius: 0,5px; 
-            font-size: 15px; 
-            font-weight: 600;
-            cursor: pointer; 
-            transition: 0.2s;
-        }
-        .btn-num:active { transform: scale(0.9); }
-        .btn-num.active { background: var(--secondary); border-color: #fff; color: #000; }
+        .grid-num { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 10px; }
+        .btn-num { background: #333; border: 1px solid #444; color: white; padding: 12px 0; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        .btn-num.active { background: var(--secondary); border-color: #fff; }
         
-        
-
-        .panel { display: none; }
+        #display-dan { background: #000; padding: 15px; margin: 10px; border-radius: 8px; color: #00ff00; word-break: break-all; min-height: 50px; border: 1px dashed #555; font-family: monospace; font-size: 14px; }
+        .panel { display: none; padding: 10px; }
         .panel.active { display: block; }
-
-        h4 { margin: 1px 0 1px 1px; color: var(--blue); font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .btn-copy-main { 
-            width: calc(100% - 1px); 
-            padding: 14px; 
-            background: var(--blue); 
-            border: none; 
-            color: white; 
-            font-weight: bold; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            margin: 12px;
-            font-size: 15px;
-        }
-
-        /* XIÊN GHÉP */
-        textarea, select { 
-            width: calc(100% - 20px); 
-            background: #1a1a1a; 
-            color: #fff; 
-            border: 1px solid #444; 
-            padding: 10px; 
-            border-radius: 6px; 
-            margin: 5px 10px; 
-            box-sizing: border-box; 
-            font-size: 14px;
-        }
-        .result-box { 
-            background: #000; 
-            padding: 10px; 
-            color: #2ecc71; 
-            margin: 10px; 
-            border-radius: 6px; 
-            border: 1px solid #333; 
-            min-height: 40px; 
-            font-family: monospace;
-        }
     </style>
 </head>
 <body>
     
     <div class="container">
         <div class="tabs">
-            <div class="tab-item active" onclick="openTab(event, 'main-tool')">KẾT QUẢ & GHÉP SỐ</div>
+            <div class="tab-item active" onclick="openTab(event, 'kq')">KẾT QUẢ</div>
+            <div class="tab-item" onclick="openTab(event, 'ghep')">GHÉP SỐ</div>
             <div class="tab-item" onclick="openTab(event, 'xien')">XIÊN GHÉP</div>
         </div>
 
-        <div id="main-tool" class="panel active">
-            <div style="text-align: center; margin-top: 8px;">
-                <span style="color: #2ecc71; font-size: 10px; font-weight: bold;">● DỮ LIỆU TRỰC TUYẾN 2026</span>
+        <div id="kq" class="panel active">
+            <div style="text-align: center; margin-bottom: 10px;">
+                <span style="color: #2ecc71; font-size: 12px;">● Đã kết nối dữ liệu 2026...</span>
             </div>
-            
-            <div class="live-container">
-                <div class="live-box">
-                    <iframe src="https://az24.vn/xsmb-30-ngay.html"></iframe>
-                </div>
-                <div id="display-dan">Dàn số: (Chưa chọn)</div>
+            <div class="live-box">
+                <iframe src="https://az24.vn/xsmb-30-ngay.html" scrolling="auto"></iframe>
             </div>
-            
-            <label style="margin-left:10px; font-size:13px;">Chọn loại D:</label>
-            <select id="DType">
-                <option value="2">2D (Cặp 2 số)</option>
-                <option value="3">3D (Cặp 3 số)</option>
-                <option value="4">3D (Cặp 4 số)</option>
-            </select>
         </div>
 
-            <h4>1. CHỌN ĐẦU (Hàng chục)</h4>
+        <div id="ghep" class="panel">
+            <h4 style="margin: 10px 0;">ĐẦU (Hàng chục)</h4>
             <div class="grid-num" id="chuc-grid"></div>
-            <div class="grid-num" style="grid-template-columns: repeat(6, 1fr); padding-top:0;">
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('chuc', 'chan')">CHẴN</button>
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('chuc', 'le')">LẺ</button>
-                <button class="btn-num" style="background:#FF4500; font-size:12px;" onclick="selectQuick('chuc', 'tatca')">TẤT CẢ</button>
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('chuc', 'tai')">TÀI</button>
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('chuc', 'xiu')">XỈU</button>
-                <button class="btn-num" style="background:#600; font-size:12px;" onclick="clearSet('chuc'); clearSet('chuc')">XÓA</button>
+            <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
+                <button class="btn-num" onclick="selectQuick('chuc', 'tai')">Tài</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'xiu')">Xỉu</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'tatca')">Tất cả</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'le')">Lẻ</button>
+                <button class="btn-num" onclick="selectQuick('chuc', 'chan')">Chẵn</button>
+                <button class="btn-num" style="background:#600;" onclick="clearSet('chuc')">Xóa</button>
             </div>
 
-            <h4>2. CHỌN ĐUÔI (Hàng đơn vị)</h4>
+            <h4 style="margin: 10px 0;">ĐUÔI (Hàng đơn vị)</h4>
             <div class="grid-num" id="dv-grid"></div>
-            <div class="grid-num" style="grid-template-columns: repeat(6, 1fr); padding-top:0;">
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('dv', 'chan')">CHẴN</button>
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('dv', 'le')">LẺ</button>
-                <button class="btn-num" style="background:#FF4500; font-size:12px;" onclick="selectQuick('dv', 'tatca')">TẤT CẢ</button>
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('dv', 'tai')">TÀI</button>
-                <button class="btn-num" style="font-size:12px;" onclick="selectQuick('dv', 'xiu')">XỈU</button>
-                <button class="btn-num" style="background:#600; font-size:12px;" onclick="clearSet('dv'); clearSet('dv')">XÓA</button>
+            <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
+                <button class="btn-num" onclick="selectQuick('dv', 'tai')">Tài</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'xiu')">Xỉu</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'tatca')">Tất cả</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'le')">Lẻ</button>
+                <button class="btn-num" onclick="selectQuick('dv', 'chan')">Chẵn</button>
+                <button class="btn-num" style="background:#600;" onclick="clearSet('dv')">Xóa</button>
             </div>
 
-            <button onclick="copyDan()" class="btn-copy-main">SAO CHÉP DÀN SỐ</button>
+            <div id="display-dan">Dàn số: </div>
+            <button onclick="copyToClipboard()" style="width: 100%; padding: 15px; background:var(--blue); border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px;">SAO CHÉP DÀN</button>
         </div>
 
-        <div id="xien" class="panel" style="padding:10px;">
-            <h3 style="color:var(--secondary); text-align:center;">GHÉP XIÊN TỰ ĐỘNG</h3>
-            <label style="margin-left:10px; font-size:13px;">Nhập dãy số (cách nhau dấu cách):</label>
-            <textarea id="inputNumbers" rows="3" placeholder="Ví dụ: 01 15 24 88 92"></textarea>
-
-            <label style="margin-left:10px; font-size:13px;">Chọn loại xiên:</label>
-            <select id="xienType">
-                <option value="2">Xiên 2 (Cặp 2 số)</option>
-                <option value="3">Xiên 3 (Cặp 3 số)</option>
-                <option value="4">Xiên 4 (Cặp 4 số)</option>
-            </select>
-
-            <button onclick="processXien()" class="btn-copy-main" style="background: var(--secondary);">BẮT ĐẦU GHÉP XIÊN</button>
-            
-            <div id="resultContainer" style="display:none;">
-                <div id="output" class="result-box"></div>
-                <div id="count" style="text-align:right; font-size:12px; margin-right:15px; color:#888;"></div>
-                <button id="copyXienBtn" onclick="copyXien()" class="btn-copy-main" style="background: #555;">SAO CHÉP KẾT QUẢ</button>
-            </div>
+        <div id="xien" class="panel">
+            <h3 style="text-align: center;">Tính năng Xiên Ghép đang cập nhật...</h3>
         </div>
     </div>
 
 <script>
     let chucSet = new Set(), dvSet = new Set();
-    let currentXienResult = "";
-    
-    function renderDan() {
-        let res = [];
-        let chucArr = Array.from(chucSet).sort();
-        let dvArr = Array.from(dvSet).sort();
-        chucArr.forEach(c => dvArr.forEach(d => res.push(c + "" + d)));
-        document.getElementById('display-dan').innerText = res.length > 0 ? "Dàn (" + res.length + " số): " + res.join(", ") : "Dàn số: (Chọn số để tạo dàn)";
-    }
 
     function initButtons() {
         const cGrid = document.getElementById('chuc-grid');
         const dGrid = document.getElementById('dv-grid');
+        cGrid.innerHTML = ''; dGrid.innerHTML = ''; // Clear trước khi tạo
         for(let i=0; i<10; i++) {
             cGrid.innerHTML += `<button class="btn-num" id="c-${i}" onclick="toggleNum('chuc', ${i})">${i}</button>`;
             dGrid.innerHTML += `<button class="btn-num" id="d-${i}" onclick="toggleNum('dv', ${i})">${i}</button>`;
@@ -246,7 +111,8 @@
     function openTab(evt, tabName) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabName).classList.add('active');
+        const target = document.getElementById(tabName);
+        if(target) target.classList.add('active');
         evt.currentTarget.classList.add('active');
     }
 
@@ -255,8 +121,13 @@
         let id = (type === 'chuc') ? `c-${n}` : `d-${n}`;
         const btn = document.getElementById(id);
         
-        if(set.has(n)) { set.delete(n); btn.classList.remove('active'); } 
-        else { set.add(n); btn.classList.add('active'); }
+        if(set.has(n)) {
+            set.delete(n);
+            btn.classList.remove('active');
+        } else {
+            set.add(n);
+            btn.classList.add('active');
+        }
         renderDan();
     }
 
@@ -282,41 +153,25 @@
         renderDan();
     }
 
-    function copyDan() {
+    function renderDan() {
+        let res = [];
+        let chucArr = Array.from(chucSet).sort((a,b) => a-b);
+        let dvArr = Array.from(dvSet).sort((a,b) => a-b);
+        
+        chucArr.forEach(c => {
+            dvArr.forEach(d => res.push(c + "" + d));
+        });
+        document.getElementById('display-dan').innerText = "Dàn (" + res.length + " số): " + res.join(", ");
+    }
+
+    function copyToClipboard() {
         const text = document.getElementById('display-dan').innerText;
         if(text.includes(": ")) {
-            navigator.clipboard.writeText(text.split(": ")[1]).then(() => alert("✅ Đã sao chép dàn số!"));
-        } else {
-            alert("Vui lòng chọn số trước!");
+            const cleanText = text.split(": ")[1];
+            navigator.clipboard.writeText(cleanText).then(() => alert("Đã sao chép dàn số!"));
         }
     }
 
-    function processXien() {
-        const input = document.getElementById('inputNumbers').value;
-        const size = parseInt(document.getElementById('xienType').value);
-        let numbers = [...new Set(input.split(/[\s, \n]+/).filter(n => n.length > 0))];
-
-        if (numbers.length < size) { alert(`Lỗi: Cần nhập ít nhất ${size} số để ghép!`); return; }
-
-        let results = [];
-        function combine(start, path) {
-            if (path.length === size) { results.push(path.join("-")); return; }
-            for (let i = start; i < numbers.length; i++) combine(i + 1, [...path, numbers[i]]);
-        }
-        combine(0, []);
-        
-        currentXienResult = results.join(", ");
-        document.getElementById('resultContainer').style.display = 'block';
-        document.getElementById('output').innerText = currentXienResult;
-        document.getElementById('count').innerText = `Tổng cộng: ${results.length} cặp xiên ${size}.`;
-    }
-
-    function copyXien() {
-        if(currentXienResult) {
-            navigator.clipboard.writeText(currentXienResult).then(() => alert("✅ Đã sao chép danh sách xiên!"));
-        }
-    }
-    
     window.onload = initButtons;
 </script>
 </body>
