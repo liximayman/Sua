@@ -83,10 +83,6 @@
                     <td><button class="btn-quick" onclick="selectQuick('chuc', 'chan')">Chẵn</button></td>
                     <td><button class="btn-quick btn-xoa" onclick="clearSet('chuc')">Xóa</button></td>
                 </tr>
-                
-                <div class="field-group" style="margin-top: 5px;">
-                <textarea id="exclude-khan" rows="1" placeholder="Nhập cạp số cần loại bỏ..." oninput="renderDan()"></textarea>
-                </div>
             </table>
 
             <table class="selector-table">
@@ -113,6 +109,9 @@
                     <td><button class="btn-quick btn-xoa" onclick="clearSet('dv')">Xóa</button></td>
                 </tr>
             </table>
+            <div class="field-group" style="margin-top: 5px;">
+                <textarea id="exclude-khan" rows="1" placeholder="Nhập cạp số cần loại bỏ..." oninput="renderDan()"></textarea>
+            </div>
             
             <div id="display-dan">Dàn số: (Trống)</div>
             <button id="copyDanBtn" class="btn-main" onclick="copyToClipboard()">SAO CHÉP DÀN</button>
