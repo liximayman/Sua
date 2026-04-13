@@ -109,6 +109,10 @@
                     <td><button class="btn-quick btn-xoa" onclick="clearSet('dv')">Xóa</button></td>
                 </tr>
             </table>
+            <div class="field-group" style="margin-top: 15px;">
+    <label style="color: #ff4d4d;">Loại trừ số khan (nhập các số cách nhau bằng dấu cách):</label>
+    <textarea id="exclude-khan" rows="1" placeholder="Ví dụ: 05 12 88" oninput="renderDan()"></textarea>
+            </div>
             
             <div id="display-dan">Dàn số: (Trống)</div>
             <button id="copyDanBtn" class="btn-main" onclick="copyToClipboard()">SAO CHÉP DÀN</button>
@@ -160,13 +164,32 @@
     }
 
     function renderDan() {
-        let res = [];
-        let chucArr = Array.from(chucSet).sort((a,b)=>a-b);
-        let dvArr = Array.from(dvSet).sort((a,b)=>a-b);
-        chucArr.forEach(c => dvArr.forEach(d => res.push(c + "" + d)));
-        const display = document.getElementById('display-dan');
-        display.innerText = res.length > 0 ? "Dàn (" + res.length + " số): " + res.join(", ") : "Dàn số: (Trống)";
+    let res = [];
+    let chucArr = Array.from(chucSet).sort((a, b) => a - b);
+    let dvArr = Array.from(dvSet).sort((a, b) => a - b);
+    
+    // Lấy danh sách số khan người dùng nhập
+    const khanInput = document.getElementById('exclude-khan').value;
+    const khanList = khanInput.split(/[\s, \n, .]+/).filter(n => n.length > 0);
+
+    // Vòng lặp ghép số
+    chucArr.forEach(c => {
+        dvArr.forEach(d => {
+            let num = c + "" + d;
+            // Chỉ thêm vào dàn nếu số đó KHÔNG nằm trong danh sách số khan
+            if (!khanList.includes(num)) {
+                res.push(num);
+            }
+        });
+    });
+
+    const display = document.getElementById('display-dan');
+    if (res.length > 0) {
+        display.innerText = "Dàn (" + res.length + " số): " + res.join(", ");
+    } else {
+        display.innerText = "Dàn số: (Trống hoặc đã bị loại hết)";
     }
+}
 
     function selectQuick(type, mode) {
         // Tắt hết các nút hiện tại trong hàng đó trước khi chọn nhanh
