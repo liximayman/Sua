@@ -3,176 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống XSMB Pro - Tự Động 2026</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>XSMB Pro - Phím Chạm Thông Minh</title>
     <style>
         :root {
             --bg-dark: #121212; --card-bg: #1e1e1e;
             --primary: #ff4d4d; --secondary: #2ecc71;
             --text: #e0e0e0; --blue: #3498db;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; padding-bottom: 60px; }
-        .container { max-width: 600px; margin: auto; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; }
+        .container { max-width: 600px; margin: auto; padding: 10px; }
         
-        .tabs { display: flex; background: #000; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-        .tab-item { flex: 1; padding: 15px 5px; text-align: center; cursor: pointer; font-size: 13px; font-weight: bold; color: #888; }
-        .tab-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+        /* Iframe kết quả */
+        .live-box { width: 100%; height: 60vh; overflow: hidden; border-radius: 8px; border: 2px solid #333; background: #fff; margin-bottom: 10px; }
+        .live-box iframe { width: 100%; height: 1500px; border: none; margin-top: -80px; }
 
-        .live-box {
-            width: 100%;
-            height: 600px; /* Giới hạn chiều cao vừa đủ */
-            overflow: hidden;
-            position: relative;
-            background: #fff;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        .live-box iframe {
-            position: absolute;
-            top: -80px; /* Căn chỉnh lại để khớp bảng KQ */
-            left: 0;
-            width: 100%;
-            height: 2000px;
-            border: none;
-        }
+        /* Hiển thị dàn số */
+        #display-dan { background: #000; padding: 15px; border-radius: 8px; color: #00ff00; word-break: break-all; min-height: 40px; border: 1px dashed #555; font-family: monospace; font-size: 16px; margin-bottom: 10px; }
 
-        .grid-num { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; padding: 10px; }
-        .btn-num { background: #333; border: 1px solid #444; color: white; padding: 12px 0; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        /* PHÍM CHẠM (FAB) */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; z-index: 999; font-size: 24px; border: 2px solid #fff; }
+
+        /* BẢNG CHỌN SỐ (MODAL) */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: var(--card-bg); width: 90%; max-width: 400px; padding: 20px; border-radius: 15px; border: 1px solid #444; }
+        
+        .grid-num { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 15px; }
+        .btn-num { background: #333; border: 1px solid #555; color: white; padding: 12px 0; border-radius: 8px; font-size: 18px; cursor: pointer; }
         .btn-num.active { background: var(--secondary); border-color: #fff; }
         
-        #display-dan { background: #000; padding: 15px; margin: 10px; border-radius: 8px; color: #00ff00; word-break: break-all; min-height: 50px; border: 1px dashed #555; font-family: monospace; font-size: 14px; }
-        .panel { display: none; padding: 10px; }
-        .panel.active { display: block; }
+        .modal-title { color: var(--primary); margin: 10px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-close { width: 100%; padding: 12px; background: var(--blue); border: none; color: white; font-weight: bold; border-radius: 8px; margin-top: 10px; cursor: pointer; }
+        
+        .btn-action { background: #444; color: #fff; border: none; padding: 5px; border-radius: 4px; font-size: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
-    
+
     <div class="container">
-        <div class="tabs">
-            <div class="tab-item active" onclick="openTab(event, 'kq')">KẾT QUẢ</div>
-            <div class="tab-item" onclick="openTab(event, 'ghep')">GHÉP SỐ</div>
-            <div class="tab-item" onclick="openTab(event, 'xien')">XIÊN GHÉP</div>
+        <div class="live-box">
+            <iframe src="https://az24.vn/xsmb-30-ngay.html"></iframe>
         </div>
 
-        <div id="kq" class="panel active">
-            <div style="text-align: center; margin-bottom: 10px;">
-                <span style="color: #2ecc71; font-size: 12px;">● Đã kết nối dữ liệu 2026...</span>
-            </div>
-            <div class="live-box">
-                <iframe src="https://az24.vn/xsmb-30-ngay.html" scrolling="auto"></iframe>
-            </div>
-        </div>
+        <div id="display-dan">Chạm nút đỏ để ghép dàn...</div>
+        <button class="btn-close" style="background: var(--blue);" onclick="copyToClipboard()">SAO CHÉP DÀN SỐ</button>
+    </div>
 
-        <div id="ghep" class="panel">
-            <h4 style="margin: 5px 0;">ĐẦU (Hàng chục)</h4>
+    <div class="fab" onclick="toggleModal()">+</div>
+
+    <div class="overlay" id="modalOverlay">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin:0; color: #fff;">Bộ Ghép Số</h3>
+                <span style="color: #888; cursor: pointer;" onclick="toggleModal()">[Đóng]</span>
+            </div>
+
+            <div class="modal-title">Hàng Chục (Đầu)</div>
             <div class="grid-num" id="chuc-grid"></div>
-            <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
-                <button class="btn-num" style="background:#FF4500;" onclick="selectQuick('chuc', 'tatca')">Tất cả</button>
-                <button class="btn-num" onclick="selectQuick('chuc', 'tai')">Tài</button>
-                <button class="btn-num" onclick="selectQuick('chuc', 'xiu')">Xỉu</button>
-                <button class="btn-num" onclick="selectQuick('chuc', 'le')">Lẻ</button>
-                <button class="btn-num" onclick="selectQuick('chuc', 'chan')">Chẵn</button>
-                <button class="btn-num" style="background:#600;" onclick="clearSet('chuc', 'xoa')">Xóa</button>
-            </div>
-
-            <h4 style="margin: 5px 0;">ĐUÔI (Hàng đơn vị)</h4>
+            
+            <div class="modal-title">Hàng Đơn Vị (Đuôi)</div>
             <div class="grid-num" id="dv-grid"></div>
-            <div class="grid-num" style="grid-template-columns: repeat(3, 1fr); padding-top:0;">
-                <button class="btn-num" style="background:#FF4500;" onclick="selectQuick('dv', 'tatca')">Tất cả</button>
-                <button class="btn-num" onclick="selectQuick('dv', 'tai')">Tài</button>
-                <button class="btn-num" onclick="selectQuick('dv', 'xiu')">Xỉu</button>
-                <button class="btn-num" onclick="selectQuick('dv', 'le')">Lẻ</button>
-                <button class="btn-num" onclick="selectQuick('dv', 'chan')">Chẵn</button>
-                <button class="btn-num" style="background:#600;" onclick="clearSet('dv', 'xoa')">Xóa</button>
-            </div>
 
-            <div id="display-dan">Dàn số: </div>
-            <button onclick="copyToClipboard()" style="width: 100%; padding: 15px; background:var(--blue); border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px;">SAO CHÉP DÀN</button>
-        </div>
-
-        <div id="xien" class="panel">
-            <h3 style="text-align: center;">Tính năng Xiên Ghép đang cập nhật...</h3>
+            <button class="btn-close" onclick="toggleModal()">XÁC NHẬN</button>
+            <button class="btn-close" style="background: #c0392b; margin-top: 5px;" onclick="clearAll()">XÓA HẾT</button>
         </div>
     </div>
 
 <script>
     let chucSet = new Set(), dvSet = new Set();
 
-    function initButtons() {
+    function init() {
         const cGrid = document.getElementById('chuc-grid');
         const dGrid = document.getElementById('dv-grid');
-        cGrid.innerHTML = ''; dGrid.innerHTML = ''; // Clear trước khi tạo
         for(let i=0; i<10; i++) {
             cGrid.innerHTML += `<button class="btn-num" id="c-${i}" onclick="toggleNum('chuc', ${i})">${i}</button>`;
             dGrid.innerHTML += `<button class="btn-num" id="d-${i}" onclick="toggleNum('dv', ${i})">${i}</button>`;
         }
     }
 
-    function openTab(evt, tabName) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        const target = document.getElementById(tabName);
-        if(target) target.classList.add('active');
-        evt.currentTarget.classList.add('active');
+    function toggleModal() {
+        const overlay = document.getElementById('modalOverlay');
+        overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
     }
 
     function toggleNum(type, n) {
         let set = (type === 'chuc') ? chucSet : dvSet;
         let id = (type === 'chuc') ? `c-${n}` : `d-${n}`;
-        const btn = document.getElementById(id);
-        
-        if(set.has(n)) {
-            set.delete(n);
-            btn.classList.remove('active');
-        } else {
-            set.add(n);
-            btn.classList.add('active');
-        }
-        renderDan();
-    }
-
-    function selectQuick(type, mode) {
-        clearSet(type);
-        for(let i=0; i<10; i++) {
-            if(mode==='tai' && i>=5) toggleNum(type, i);
-            else if(mode==='xiu' && i<5) toggleNum(type, i);
-            else if(mode==='le' && i%2!==0) toggleNum(type, i);
-            else if(mode==='chan' && i%2===0) toggleNum(type, i);
-            else if(mode==='tatca') toggleNum(type, i);
-        }
-    }
-
-    function clearSet(type) {
-        if(type==='chuc') { 
-            chucSet.clear(); 
-            document.querySelectorAll('#chuc-grid .btn-num').forEach(b=>b.classList.remove('active')); 
-        } else { 
-            dvSet.clear(); 
-            document.querySelectorAll('#dv-grid .btn-num').forEach(b=>b.classList.remove('active')); 
-        }
+        if(set.has(n)) set.delete(n); else set.add(n);
+        document.getElementById(id).classList.toggle('active');
         renderDan();
     }
 
     function renderDan() {
         let res = [];
-        let chucArr = Array.from(chucSet).sort((a,b) => a-b);
-        let dvArr = Array.from(dvSet).sort((a,b) => a-b);
-        
-        chucArr.forEach(c => {
-            dvArr.forEach(d => res.push(c + "" + d));
-        });
-        document.getElementById('display-dan').innerText = "Dàn (" + res.length + " số): " + res.join(", ");
+        let chucArr = Array.from(chucSet).sort();
+        let dvArr = Array.from(dvSet).sort();
+        chucArr.forEach(c => dvArr.forEach(d => res.push(c + "" + d)));
+        const display = document.getElementById('display-dan');
+        display.innerText = res.length > 0 ? "Dàn (" + res.length + " số): " + res.join(", ") : "Chạm nút đỏ để ghép dàn...";
+    }
+
+    function clearAll() {
+        chucSet.clear(); dvSet.clear();
+        document.querySelectorAll('.btn-num').forEach(b => b.classList.remove('active'));
+        renderDan();
     }
 
     function copyToClipboard() {
         const text = document.getElementById('display-dan').innerText;
-        if(text.includes(": ")) {
-            const cleanText = text.split(": ")[1];
-            navigator.clipboard.writeText(cleanText).then(() => alert("Đã sao chép dàn số!"));
-        }
+        if (text.includes("Chạm nút")) return alert("Chưa có số để sao chép!");
+        const cleanText = text.split(": ")[1];
+        navigator.clipboard.writeText(cleanText).then(() => alert("Đã copy dàn số!"));
     }
 
-    window.onload = initButtons;
+    window.onload = init;
 </script>
 </body>
 </html>
