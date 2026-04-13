@@ -59,6 +59,9 @@
             <div class="live-box">
                 <iframe src="https://az24.vn/xsmb-30-ngay.html"></iframe>
             </div>
+            <div class="field-group" style="margin-top: 15px;">
+    <textarea id="exclude-khan" rows="1" placeholder="nhập số cần loại bỏ..." oninput="renderDan()"></textarea>
+            </div>
 
             <table class="selector-table">
                 <tr>
@@ -110,8 +113,7 @@
                 </tr>
             </table>
             <div class="field-group" style="margin-top: 15px;">
-    <label style="color: #ff4d4d;">Loại trừ số khan (nhập các số cách nhau bằng dấu cách):</label>
-    <textarea id="exclude-khan" rows="1" placeholder="Ví dụ: 05 12 88" oninput="renderDan()"></textarea>
+    <textarea id="exclude-khan" rows="1" placeholder="nhập số cần loại bỏ..." oninput="renderDan()"></textarea>
             </div>
             
             <div id="display-dan">Dàn số: (Trống)</div>
