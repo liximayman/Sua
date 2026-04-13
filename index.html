@@ -22,7 +22,7 @@
 
         /* Style mới theo hình ảnh của bạn */
         .selector-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; table-layout: fixed; }
-        .selector-table td { width: 10%; border: 1px solid var(--border-gray); padding: 0; position: relative; }
+        .selector-table td { width: 2px; border: 1px solid var(--border-gray); padding: 0; position: relative; }
         .label-cell { background: #1a1a1a; width: 60px; text-align: center; font-size: 14px; color: #fff; border-right: 2px solid #333 !important; }
         
         .btn-num { 
@@ -30,7 +30,7 @@
             font-size: 18px; font-weight: bold; cursor: pointer; display: block; 
         }
         .btn-quick { 
-            width: 100%; height: 15px; background: #222; border: none; color: #fff; 
+            width: 100%; height: 20px; background: #222; border: none; color: #fff; 
             font-size: 13px; font-weight: bold; cursor: pointer; 
         }
         .btn-num.active { background: var(--secondary); color: #fff; }
@@ -129,7 +129,7 @@
                 </select>
             </div>
             <div class="field-group">
-                <label>Số loại bỏ (Số khan):</label>
+                <label>Số loại bỏ (nhập số không thích của bạn ở đây...):</label>
                 <textarea id="excludeNumbers" rows="1" placeholder="Ví dụ: 13 49" oninput="processXien()"></textarea>
             </div>
             <div id="resultContainer" style="display:none;">
