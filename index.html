@@ -54,13 +54,15 @@
         <div class="tab-item" onclick="openTab(event, 'xien-panel')">XIÊN GHÉP</div>
     </div>
 
-    <div class="container">
+        <div class="container">
         <div id="main-panel" class="panel active">
             <div class="live-box">
                 <iframe src="https://az24.vn/xsmb-30-ngay.html"></iframe>
             </div>
+
             <div class="field-group" style="margin-top: 5px;">
-    <textarea id="exclude-khan" rows="1" placeholder="nhập số cần loại bỏ..." oninput="renderDan()"></textarea>
+                <label style="color: #ff4d4d; font-size: 12px;">LOẠI TRỪ SỐ KHAN:</label>
+                <textarea id="exclude-khan" rows="1" placeholder="Nhập các số cần loại bỏ (vd: 05 12 88)..." oninput="renderDan()"></textarea>
             </div>
 
             <table class="selector-table">
@@ -112,13 +114,12 @@
                     <td><button class="btn-quick btn-xoa" onclick="clearSet('dv')">Xóa</button></td>
                 </tr>
             </table>
-        </div>
             
             <div id="display-dan">Dàn số: (Trống)</div>
             <button id="copyDanBtn" class="btn-main" onclick="copyToClipboard()">SAO CHÉP DÀN</button>
-        </div>
-
-        <div id="xien-panel" class="panel">
+        </div> ```
+            
+<div id="xien-panel" class="panel">
             <h2 style="color: var(--secondary); font-size: 18px;">Ghép Xiên Thông Minh</h2>
             <div class="field-group">
                 <label>Nhập dãy số:</label>
