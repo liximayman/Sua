@@ -3,206 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống XSMB Pro - Chạm & Xiên 2026</title>
+    <title>Giao diện Xổ Số</title>
     <style>
-        :root {
-            --bg-dark: #121212; --card-bg: #1e1e1e;
-            --primary: #ff4d4d; --secondary: #2ecc71;
-            --text: #e0e0e0; --blue: #3498db; --gold: #f1c40f;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; padding-bottom: 60px; overflow-x: hidden; }
-        .container { max-width: 600px; margin: auto; padding: 10px; }
-        
-        /* Tab Menu */
-        .tabs { display: flex; background: #000; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-        .tab-item { flex: 1; padding: 15px 5px; text-align: center; cursor: pointer; font-size: 14px; font-weight: bold; color: #888; transition: 0.3s; }
-        .tab-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: #1a1a1a; }
-        
-        /* Live Box */
-        .live-box { width: 100%; height: 400px; overflow-y: auto; background: #fff; border-radius: 8px; margin-bottom: 15px; border: 2px solid #333; }
-        .live-box iframe { width: 100%; height: 1200px; border: none; margin-top: -60px; }
 
-        /* Quick Select Grid */
-        .grid-num { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 10px 0; }
-        .btn-num { background: #2a2a2a; border: 1px solid #444; color: white; padding: 12px 0; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-num.active { background: var(--primary); border-color: #fff; box-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
-        
-        /* Display Area */
-        #display-dan, .result-box { background: #000; padding: 12px; margin: 15px 0; border-radius: 8px; color: #00ff00; word-break: break-all; min-height: 60px; border: 1px dashed #555; font-family: 'Courier New', monospace; font-size: 16px; line-height: 1.5; }
-        
-        .panel { display: none; }
-        .panel.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        /* Form Elements */
-        .field-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 14px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
-        textarea, select { width: 100%; background: #252525; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        
-        .btn-main { width: 100%; padding: 15px; background: var(--blue); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.3s; }
-        .btn-main:active { transform: scale(0.98); }
-        .stats { font-size: 14px; color: var(--secondary); margin-top: 5px; font-weight: bold; }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+
+        /* Phần bảng kết quả bên trên */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .result-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .bg-light-blue { background-color: #e3f2fd; }
+        .bg-blue { background-color: #90caf9; font-weight: bold; }
+        .special { font-weight: bold; font-size: 18px; }
+        .highlight-blue { color: #1976d2; }
+
+        /* Thanh tiêu đề Kết quả gần đây */
+        .header-bar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Tab menu 2D, 3D, 4D */
+        .tab-menu {
+            background-color: #1a1a1a;
+            display: flex;
+            padding: 10px;
+            gap: 20px;
+            color: #bbb;
+            font-weight: bold;
+        }
+
+        .tab-menu .active {
+            color: #4caf50;
+            border-bottom: 2px solid #4caf50;
+        }
+
+        /* Bảng chọn số (Chục / Đơn vị) */
+        .bet-section {
+            background-color: #2c2c2c;
+            padding: 10px;
+        }
+
+        .selector-row {
+            display: flex;
+            margin-bottom: 10px;
+            border: 1px solid #444;
+        }
+
+        .label-cell {
+            background-color: #444;
+            color: white;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 12px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            flex-grow: 1;
+        }
+
+        .grid-item {
+            background-color: #555;
+            color: white;
+            border: 0.5px solid #333;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .grid-item.action {
+            background-color: #3d3d3d;
+            font-size: 13px;
+            color: #ddd;
+        }
+
+        .grid-item:active {
+            background-color: #4caf50;
+        }
+
+        .dropdown-bar {
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            border-bottom: 1px solid #333;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="tabs">
-        <div class="tab-item active" onclick="openTab(event, 'main-panel')">PHÍM CHẠM NHANH</div>
-        <div class="tab-item" onclick="openTab(event, 'xien-panel')">GHÉP XIÊN PRO</div>
+<div class="container">
+    <table class="result-table">
+        <tr class="bg-light-blue">
+            <td>Đặc Biệt</td>
+            <td class="special">775<span class="highlight-blue">44</span></td>
+            <td class="bg-blue">Đầu</td>
+            <td class="bg-blue">Đuôi</td>
+        </tr>
+        <tr>
+            <td>Nhất</td>
+            <td>01588</td>
+            <td class="bg-blue">0</td>
+            <td>3,4,7</td>
+        </tr>
+        <tr>
+            <td>Nhì</td>
+            <td>72768 - 51488</td>
+            <td class="bg-blue">1</td>
+            <td>4,0,7</td>
+        </tr>
+        <tr>
+            <td>Ba</td>
+            <td>34503 - 00614 - 35374<br>49675 - 70691 - 32192</td>
+            <td class="bg-blue">2</td>
+            <td>7,7</td>
+        </tr>
+    </table>
+
+    <div class="header-bar">Kết quả gần đây</div>
+    
+    <div class="tab-menu">
+        <span class="active">2D</span>
+        <span>3D</span>
+        <span>4D</span>
+        <span>Tổng hợp</span>
     </div>
 
-    <div class="container">
-        <div id="main-panel" class="panel active">
-            <div class="live-box">
-                <iframe src="https://az24.vn/xsmb-30-ngay.html"></iframe>
-            </div>
+    <div class="dropdown-bar">
+        2D - Đề đuôi ▾
+    </div>
 
-            <h4 style="margin: 10px 0; color: var(--gold); text-align: center;">CHỌN PHÍM CHẠM (QUICK SELECT)</h4>
-            <div class="grid-num" id="quick-touch-grid">
-                </div>
-
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-main" style="background:#444; flex: 1;" onclick="clearAllTouches()">XÓA HẾT</button>
-                <button class="btn-main" style="background:var(--secondary); flex: 1;" onclick="selectAllTouches()">CHỌN HẾT</button>
+    <div class="bet-section">
+        <div class="selector-row">
+            <div class="label-cell">Chục</div>
+            <div class="grid-container">
+                <div class="grid-item">0</div>
+                <div class="grid-item">1</div>
+                <div class="grid-item">2</div>
+                <div class="grid-item">3</div>
+                <div class="grid-item">4</div>
+                <div class="grid-item">5</div>
+                <div class="grid-item">6</div>
+                <div class="grid-item">7</div>
+                <div class="grid-item">8</div>
+                <div class="grid-item">9</div>
+                <div class="grid-item action">Tài</div>
+                <div class="grid-item action">Xỉu</div>
+                <div class="grid-item action">Lẻ</div>
+                <div class="grid-item action">Chẵn</div>
+                <div class="grid-item action">Xóa</div>
             </div>
-            
-            <div id="display-dan">Dàn số: (Trống)</div>
-            <button id="copyDanBtn" class="btn-main" onclick="copyToClipboard('display-dan', 'copyDanBtn')">SAO CHÉP DÀN</button>
         </div>
 
-        <div id="xien-panel" class="panel">
-            <h2 style="color: var(--secondary); border-left: 4px solid var(--secondary); padding-left: 10px;">Ghép Xiên Tự Động</h2>
-            
-            <div class="field-group">
-                <label>Nhập dãy số muốn ghép:</label>
-                <textarea id="inputNumbers" rows="3" placeholder="Ví dụ: 01, 15, 24, 88..." oninput="processXien()"></textarea>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div class="field-group">
-                    <label>Loại xiên:</label>
-                    <select id="xienType" onchange="processXien()">
-                        <option value="2">Xiên 2</option>
-                        <option value="3">Xiên 3</option>
-                        <option value="4">Xiên 4</option>
-                    </select>
-                </div>
-                <div class="field-group">
-                    <label>Loại bỏ (Số khan):</label>
-                    <textarea id="excludeNumbers" rows="1" placeholder="Ví dụ: 13, 49" oninput="processXien()"></textarea>
-                </div>
-            </div>
-
-            <div id="resultContainer" style="display:none;">
-                <div id="count" class="stats"></div>
-                <div id="output" class="result-box"></div>
-                <button id="copyXienBtn" class="btn-main" onclick="copyXien()">SAO CHÉP XIÊN</button>
+        <div class="selector-row">
+            <div class="label-cell">Đơn vị</div>
+            <div class="grid-container">
+                <div class="grid-item">0</div>
+                <div class="grid-item">1</div>
+                <div class="grid-item">2</div>
+                <div class="grid-item">3</div>
+                <div class="grid-item">4</div>
+                <div class="grid-item">5</div>
+                <div class="grid-item">6</div>
+                <div class="grid-item">7</div>
+                <div class="grid-item">8</div>
+                <div class="grid-item">9</div>
+                <div class="grid-item action">Tài</div>
+                <div class="grid-item action">Xỉu</div>
+                <div class="grid-item action">Lẻ</div>
+                <div class="grid-item action">Chẵn</div>
+                <div class="grid-item action">Xóa</div>
             </div>
         </div>
     </div>
+</div>
 
-<script>
-    let activeTouches = new Set();
-    let currentXienResult = "";
-
-    // Khởi tạo các nút Chạm từ 0-9
-    function init() {
-        const grid = document.getElementById('quick-touch-grid');
-        for(let i=0; i<10; i++) {
-            grid.innerHTML += `<button class="btn-num" id="t-${i}" onclick="toggleTouch(${i})">Chạm ${i}</button>`;
-        }
-    }
-
-    function openTab(evt, tabName) {
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        document.getElementById(tabName).classList.add('active');
-        evt.currentTarget.classList.add('active');
-    }
-
-    // Logic Chạm: Nếu chọn Chạm 1 -> Lấy tất cả số có số 1
-    function toggleTouch(n) {
-        if(activeTouches.has(n)) activeTouches.delete(n);
-        else activeTouches.add(n);
-        document.getElementById(`t-${n}`).classList.toggle('active');
-        renderDan();
-    }
-
-    function renderDan() {
-        let resSet = new Set();
-        activeTouches.forEach(num => {
-            for(let i=0; i<10; i++) {
-                resSet.add(num.toString() + i.toString()); // Đầu num
-                resSet.add(i.toString() + num.toString()); // Đuôi num
-            }
-        });
-        
-        let sortedRes = Array.from(resSet).sort();
-        const display = document.getElementById('display-dan');
-        display.innerText = sortedRes.length > 0 ? "Dàn (" + sortedRes.length + " số): " + sortedRes.join(", ") : "Dàn số: (Trống)";
-    }
-
-    function clearAllTouches() {
-        activeTouches.clear();
-        document.querySelectorAll('.btn-num').forEach(b => b.classList.remove('active'));
-        renderDan();
-    }
-
-    function selectAllTouches() {
-        for(let i=0; i<10; i++) {
-            if(!activeTouches.has(i)) toggleTouch(i);
-        }
-    }
-
-    function copyToClipboard(elementId, btnId) {
-        const text = document.getElementById(elementId).innerText;
-        if (text.includes("(Trống)")) return;
-        const cleanText = text.includes(":") ? text.split(": ")[1] : text;
-        
-        navigator.clipboard.writeText(cleanText).then(() => {
-            const btn = document.getElementById(btnId);
-            const originalText = btn.innerText;
-            btn.innerText = "ĐÃ SAO CHÉP ✓";
-            btn.style.background = "var(--secondary)";
-            setTimeout(() => { btn.innerText = originalText; btn.style.background = "var(--blue)"; }, 1500);
-        });
-    }
-
-    // Logic Xiên
-    function processXien() {
-        const input = document.getElementById('inputNumbers').value;
-        const exclude = document.getElementById('excludeNumbers').value;
-        const size = parseInt(document.getElementById('xienType').value);
-        
-        let numbers = [...new Set(input.split(/[\s, \n, .]+/).filter(n => n.length === 2))];
-        let excludeList = exclude.split(/[\s, \n, .]+/).filter(n => n.length > 0);
-        numbers = numbers.filter(n => !excludeList.includes(n));
-
-        const container = document.getElementById('resultContainer');
-        if (numbers.length < size) { container.style.display = 'none'; return; }
-
-        let results = [];
-        function combine(start, path) {
-            if (path.length === size) { results.push(path.join("-")); return; }
-            for (let i = start; i < numbers.length; i++) combine(i + 1, [...path, numbers[i]]);
-        }
-        combine(0, []);
-
-        currentXienResult = results.join("\n");
-        container.style.display = 'block';
-        document.getElementById('output').innerText = results.join(", ");
-        document.getElementById('count').innerText = `✓ Đã ghép: ${results.length} cặp xiên ${size}`;
-    }
-
-    function copyXien() {
-        navigator.clipboard.writeText(currentXienResult).then(() => {
-            const btn = document.getElementById('copyXienBtn');
-            btn.innerText = "ĐÃ SAO CHÉP ✓"; btn.style.background = "var(--secondary)";
-            setTimeout(() => { btn.innerText = "SAO CHÉP XIÊN"; btn.style.background = "var(--blue)"; }, 1500);
-        });
-    }
-
-    window.onload = init;
-</script>
 </body>
 </html>
